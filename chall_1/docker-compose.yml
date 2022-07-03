@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - .:/app/
+    links:
+      - php
+    networks:
+      - static-network
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    networks:
+      - static-network
+    volumes:
+      - .:/app/
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
+          ip_range: 172.30.0.0/30
